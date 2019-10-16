@@ -1,4 +1,3 @@
-# REF: https://chatbotslife.com/build-a-working-sms-chat-bot-in-10-minutes-b8278d80cc7a
 import json
 import apiai
 from flask import Flask
