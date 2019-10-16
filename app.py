@@ -42,16 +42,17 @@ def server():
     # get SMS metadata
     msg_from = request.values.get("From", my_number)
     msg = request.values.get("Body", "")
-    
+    msg = msg.strip()
+
     # Security
     if msg_from != my_number:
         client.messages.create(to=msg_from, from_=account_num, body="Unauthorized Access")
         client.messages.create(to=my_number, from_=account_num, body=f"Unauthorized Access by {msg_from}. Msg reads: {msg}")
         return str(resp)
-    
+
     # Bash Access
     if msg.startswith('!'):
-        msg = msg[1:]
+        msg = msg[1:].strip()
         if msg:
             out = subprocess.check_output(msg.split(' ')).decode('utf-8')[0:100]
             client.messages.create(to=msg_from, from_=account_num, body=out)
@@ -59,9 +60,17 @@ def server():
 
     # Python Access
     if msg.startswith('?'):
-        msg = msg[1:]
+        msg = msg[1:].strip()
         if msg:
             out = eval(msg)
+            client.messages.create(to=msg_from, from_=account_num, body=out)
+        return str(resp)
+
+    # Google
+    if msg.lower().startswith('g?'):
+        msg = msg[2:].strip()
+        if msg:
+            out = subprocess.check_output(['googler', '--count', '1', '--noprompt'] + msg.split())
             client.messages.create(to=msg_from, from_=account_num, body=out)
         return str(resp)
 
