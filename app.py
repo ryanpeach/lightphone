@@ -1,9 +1,11 @@
 import json
 import apiai
-from flask import Flask
-import twilio.twiml
 
+import twilio.twiml
 from twilio.rest import Client
+from twilio.twiml.messaging_response import Message, MessagingResponse
+
+from flask import Flask, request, redirect
 
 # Twilio account info
 with open('/home/rgpeach10/Documents/Workspace/lightphone/secrets.json', 'r') as f:
@@ -27,7 +29,7 @@ def hello_world():
 def server():
     from flask import request
     # get SMS input via twilio
-    resp = twilio.twiml.Response()
+    resp = MessagingResponse()
 
     # get SMS metadata
     msg_from = request.values.get("From", None)
