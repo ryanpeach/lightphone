@@ -2,16 +2,19 @@ import json
 import apiai
 from flask import Flask
 import twilio.twiml
-from twilio.rest import TwilioRestClient
+
+from twilio.rest import Client
 
 # Twilio account info
-account_sid = "AC11ba____________________96e87003"
-auth_token = "6789333____________________849d2"
-account_num = "+1617_____42"
-client = TwilioRestClient(account_sid, auth_token)
+with open('/home/rgpeach10/Documents/Workspace/lightphone/secrets.json', 'r') as f:
+    secrets = json.load(f)
+account_sid = secrets['account_sid']
+auth_token = secrets['auth_token']
+account_num = secrets['account_num']
+client = Client(account_sid, auth_token)
 
 # api.ai account info
-CLIENT_ACCESS_TOKEN = "78c0e0________________fbcd9404a2"
+CLIENT_ACCESS_TOKEN = secrets['api.ai.AT']
 ai = apiai.ApiAI(CLIENT_ACCESS_TOKEN)
 
 app = Flask(__name__)
